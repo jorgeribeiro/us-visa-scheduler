@@ -5,6 +5,6 @@
 - Simply run `python -c "import setup; setup.as_loop()"`
 
 ## Next steps
-- Implement delayed retry for lambda function
 - Confirm successful reschedule by checking response's HTML
+- Implement delayed retry for lambda function
 - Test!
