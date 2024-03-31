@@ -349,14 +349,13 @@ class VisaScheduler:
         }
 
         r = requests.post(APPOINTMENT_URL, headers=headers, data=data)
-        logger.info(f"Reschedule response: {r.status_code} - {r.text}")
         if r.status_code == 200:
-            msg = f"Rescheduled Successfully! {date} {time}" + f", ASC: {asc_date} {asc_time}" if NEED_ASC else ""
+            msg = f"Rescheduled Successfully! {date} {time}"
             logger.info(msg)
             self.send_notification(msg)
             return Result.SUCCESS
         else:
-            msg = f"Reschedule Failed. {date} {time}" + f", ASC: {asc_date} {asc_time}" if NEED_ASC else ""
+            msg = f"Reschedule Failed. {date} {time}"
             logger.error(msg)
             self.send_notification(msg)
             return Result.RETRY
