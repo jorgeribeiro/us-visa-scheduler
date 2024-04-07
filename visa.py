@@ -159,10 +159,8 @@ class VisaScheduler:
         data = r.json()
         times = data.get("available_times")[::-1]
         for t in times:
-            hour, minute = t.split(":")
-            if self.MY_CONDITION_TIME(hour, minute):
-                logger.info(f"Got time successfully! {date} {t}")
-                return t
+            logger.info(f"Got time successfully! {date} {t}")
+            return t
 
     def reschedule(self, date, time, asc_date=None, asc_time=None):
         logger.info(f"Starting Reschedule ({date})")
@@ -302,9 +300,7 @@ class VisaScheduler:
         for d in dates:
             date = d.get('date')
             if is_earlier(date):
-                year, month, day = date.split('-')
-                if VisaScheduler.MY_CONDITION_DATE(year, month, day):
-                    return date
+                return date
 
     @staticmethod
     def send_notification(msg):
@@ -367,14 +363,12 @@ class VisaScheduler:
             date = self.get_available_date(dates)
 
             if not date:
-                # No dates that fulfill MY_CONDITION_DATE or early enough
                 result = Result.RETRY
                 return result
 
             date_time = self.get_time(date)
 
             if not date_time:
-                # No times that fulfill MY_CONDITION_TIME
                 result = Result.RETRY
                 return result
 
@@ -388,12 +382,10 @@ class VisaScheduler:
                     return result
 
                 if not asc_date[0] and not asc_date[1]:
-                    # No dates that fulfill MY_CONDITION_DATE
                     result = Result.RETRY
                     return result
 
                 if not asc_date[1]:
-                    # No times that fulfill MY_CONDITION_TIME
                     result = Result.RETRY
                     return result
 
