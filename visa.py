@@ -82,7 +82,13 @@ class VisaScheduler:
         appointment = element.find_element(By.CLASS_NAME, 'consular-appt').text
         regex = r".+: (.+,.+),.+"
         date = re.search(regex, appointment).group(1)
-        self.my_schedule_date = datetime.strptime(date, "%d %B, %Y").strftime("%Y-%m-%d")
+        return datetime.strptime(date, "%d %B, %Y").strftime("%Y-%m-%d")
+    
+    def is_schedule_date_near(self, date):
+        my_date = datetime.strptime(self.my_schedule_date, "%Y-%m-%d")
+        new_date = datetime.strptime(date, "%Y-%m-%d")
+        delta = new_date - my_date
+        return delta.days <= 7
 
     def login(self):
         # Bypass reCAPTCHA
@@ -356,7 +362,12 @@ class VisaScheduler:
 
         try:
             self.login()
-            self.get_my_schedule_date()
+            self.my_schedule_date = self.get_my_schedule_date()
+            if (self.is_schedule_date_near(self.my_schedule_date)):
+                logger.info(f"Current date: {self.my_schedule_date} is near enough. Stopping...")
+                result = Result.STOP
+                return result
+
             dates = self.get_date()[:5]
             if not dates:
                 logger.info("No dates available on FACILITY")

@@ -6,10 +6,10 @@
 
 ## Next steps
 - Confirm successful reschedule by checking response's HTML
-- Stop execution 7 days before the current interview date
 - Implement useful email notifications:
     - Successful reschedule
     - Failed login attempt
+    - Execution stopped since interview date is nearby
     - Any failures or unexpected results sent to the developer's email
 - Test!
 

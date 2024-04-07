@@ -15,3 +15,4 @@ class Result(Enum):
     COOLDOWN = 3
     EXCEPTION = 4
     WEBDRIVER_EXCEPTION = 5
+    STOP = 6
