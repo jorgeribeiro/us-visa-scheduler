@@ -9,6 +9,7 @@
 - Stop execution 7 days before the current interview date
 - Implement useful email notifications:
     - Successful reschedule
+    - Failed login attempt
     - Any failures or unexpected results sent to the developer's email
 - Test!
 
