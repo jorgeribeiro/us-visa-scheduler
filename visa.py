@@ -206,7 +206,7 @@ class VisaScheduler:
             "Cookie": "_yatri_session=" + self.driver.get_cookie("_yatri_session")["value"]
         }
 
-        r = requests.post(APPOINTMENT_URL, headers=headers, data=data)
+        requests.post(APPOINTMENT_URL, headers=headers, data=data)
         schedule_date = self.get_my_schedule_date()
         if schedule_date == date:
             msg = f"Rescheduled Successfully! {date} {time}"
