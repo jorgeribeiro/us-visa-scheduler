@@ -24,10 +24,7 @@ def lambda_handler(event, context):
     handler = VisaScheduler()
     result = handler.main()
     
-    # Determine the next execution time based on the result
     next_execution_time = calculate_next_execution_time(result)
-
-    # Update the EventBridge rule schedule dynamically
     update_eventbridge_rule_schedule(next_execution_time)
 
 def calculate_next_execution_time(result):
