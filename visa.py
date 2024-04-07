@@ -84,10 +84,10 @@ class VisaScheduler:
         date = re.search(regex, appointment).group(1)
         return datetime.strptime(date, "%d %B, %Y").strftime("%Y-%m-%d")
     
-    def is_schedule_date_near(self, date):
+    def is_schedule_date_near(self):
         my_date = datetime.strptime(self.my_schedule_date, "%Y-%m-%d")
-        new_date = datetime.strptime(date, "%Y-%m-%d")
-        delta = new_date - my_date
+        today = datetime.today()
+        delta = my_date - today
         return delta.days <= 7
 
     def login(self):
@@ -363,7 +363,7 @@ class VisaScheduler:
         try:
             self.login()
             self.my_schedule_date = self.get_my_schedule_date()
-            if (self.is_schedule_date_near(self.my_schedule_date)):
+            if (self.is_schedule_date_near()):
                 logger.info(f"Current date: {self.my_schedule_date} is near enough. Stopping...")
                 result = Result.STOP
                 return result
