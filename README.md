@@ -5,13 +5,12 @@
 - Simply run `python -c "import setup; setup.as_loop()"`
 
 ## Next steps
-- Confirm successful reschedule by checking response's HTML
+- Test!
 - Implement useful email notifications:
     - Successful reschedule
     - Failed login attempt
     - Execution stopped since interview date is nearby
     - Any failures or unexpected results sent to the developer's email
-- Test!
 
 ## Extra notes
 ```

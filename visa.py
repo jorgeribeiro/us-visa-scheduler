@@ -53,6 +53,7 @@ STEP_TIME = 0.5  # time between steps (interactions with forms): 0.5 seconds
 
 DATE_URL = f"https://ais.usvisa-info.com/{COUNTRY_CODE}/niv/schedule/{SCHEDULE_ID}/appointment/days/{FACILITY_ID}.json?appointments[expedite]=false"
 TIME_URL = f"https://ais.usvisa-info.com/{COUNTRY_CODE}/niv/schedule/{SCHEDULE_ID}/appointment/times/{FACILITY_ID}.json?date={{date}}&appointments[expedite]=false"
+HOME_URL = f"https://ais.usvisa-info.com/{COUNTRY_CODE}/niv/account"
 APPOINTMENT_URL = f"https://ais.usvisa-info.com/{COUNTRY_CODE}/niv/schedule/{SCHEDULE_ID}/appointment"
 DATE_URL_ASC = f"https://ais.usvisa-info.com/{COUNTRY_CODE}/niv/schedule/{SCHEDULE_ID}/appointment/days/{ASC_ID}.json?&consulate_id={FACILITY_ID}&consulate_date={{date}}&consulate_time={{time}}&appointments[expedite]=false"
 TIME_URL_ASC = f"https://ais.usvisa-info.com/{COUNTRY_CODE}/niv/schedule/{SCHEDULE_ID}/appointment/times/{ASC_ID}.json?date={{date_asc}}&consulate_id={FACILITY_ID}&consulate_date={{date}}&consulate_time={{time}}&appointments[expedite]=false"
@@ -76,6 +77,7 @@ class VisaScheduler:
 
     def get_my_schedule_date(self):
         logger.info("Getting my schedule date...")
+        self.driver.get(HOME_URL) # Go to home page where schedule date is displayed
         element = self.driver.find_element(By.XPATH,
                                            '//a[contains(@href, "%s")]/ancestor::div[contains(@class, "application")]' % SCHEDULE_ID)
 
@@ -85,9 +87,9 @@ class VisaScheduler:
         return datetime.strptime(date, "%d %B, %Y").strftime("%Y-%m-%d")
     
     def is_schedule_date_near(self):
-        my_date = datetime.strptime(self.my_schedule_date, "%Y-%m-%d")
+        my_schedule_date = datetime.strptime(self.my_schedule_date, "%Y-%m-%d")
         today = datetime.today()
-        delta = my_date - today
+        delta = my_schedule_date - today
         return delta.days <= 7
 
     def login(self):
@@ -205,7 +207,8 @@ class VisaScheduler:
         }
 
         r = requests.post(APPOINTMENT_URL, headers=headers, data=data)
-        if r.status_code == 200:
+        schedule_date = self.get_my_schedule_date()
+        if schedule_date == date:
             msg = f"Rescheduled Successfully! {date} {time}"
             logger.info(msg)
             self.send_notification(msg)
@@ -294,25 +297,11 @@ class VisaScheduler:
             result = my_date > new_date
             logger.info(f"Is {my_date} > {new_date}:\t{result}")
             return result
-        
-        def is_not_today(date):
-            new_date = datetime.strptime(date, "%Y-%m-%d")
-            today = datetime.today()
-            result = new_date != today
-            logger.info(f"Is {new_date} not today:\t{result}")
-            return result
-        
-        def is_not_tomorrow(date):
-            new_date = datetime.strptime(date, "%Y-%m-%d")
-            tomorrow = datetime.today() + timedelta(days=1)
-            result = new_date != tomorrow
-            logger.info(f"Is {new_date} not tomorrow:\t{result}")
-            return result
 
-        logger.info("Checking for an earlier and appropriate date:")
+        logger.info("Checking for an earlier date:")
         for d in dates:
             date = d.get('date')
-            if is_earlier(date) and is_not_today(date) and is_not_tomorrow(date):
+            if is_earlier(date):
                 year, month, day = date.split('-')
                 if VisaScheduler.MY_CONDITION_DATE(year, month, day):
                     return date
