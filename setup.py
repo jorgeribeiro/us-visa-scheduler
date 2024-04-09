@@ -3,7 +3,6 @@ import time
 from utils import Time
 from visa import VisaScheduler, Result
 
-
 def as_loop():
     while 1:
         handler = VisaScheduler()
