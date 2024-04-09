@@ -5,7 +5,7 @@ import random
 import re
 import sys
 import time as tm
-from datetime import datetime, timedelta
+from datetime import datetime
 from enum import Enum
 from tempfile import mkdtemp
 
