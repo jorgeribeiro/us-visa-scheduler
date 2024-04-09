@@ -8,7 +8,7 @@ RUN pip install -r requirements.txt
 
 # Copy function code
 COPY config.ini ${LAMBDA_TASK_ROOT}
-COPY setup.py ${LAMBDA_TASK_ROOT}
+COPY handler.py ${LAMBDA_TASK_ROOT}
 COPY utils.py ${LAMBDA_TASK_ROOT}
 COPY visa.py ${LAMBDA_TASK_ROOT}
 
