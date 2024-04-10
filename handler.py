@@ -1,5 +1,4 @@
 import logging
-import datetime
 import boto3
 
 from utils import Time
