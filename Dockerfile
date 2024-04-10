@@ -1,4 +1,4 @@
-FROM public.ecr.aws/lambda/python:3.11
+FROM umihico/aws-lambda-selenium-python:latest
 
 # Copy requirements.txt
 COPY requirements.txt ${LAMBDA_TASK_ROOT}
