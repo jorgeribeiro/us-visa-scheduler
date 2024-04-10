@@ -269,7 +269,7 @@ class VisaScheduler:
         dr = None
         if USE == Use.LOCAL.value:
             chrome_options = webdriver.ChromeOptions()
-            # chrome_options.add_argument('--headless')
+            chrome_options.add_argument('--headless')
             dr = webdriver.Chrome(ChromeDriverManager().install(), options=chrome_options)
         elif USE == Use.AWS.value:
             chrome_options = webdriver.ChromeOptions()
