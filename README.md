@@ -11,6 +11,7 @@
     - Failed login attempt
     - Execution stopped since interview date is nearby
     - Any failures or unexpected results sent to the developer's email
+- Use Serverless Framework to facilitate the deployment
 
 ## Extra notes
 ```
