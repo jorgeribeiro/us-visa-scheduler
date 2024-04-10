@@ -84,6 +84,7 @@ class VisaScheduler:
         appointment = element.find_element(By.CLASS_NAME, 'consular-appt').text
         regex = r".+: (.+,.+),.+"
         date = re.search(regex, appointment).group(1)
+        logger.info(f"My schedule date: {date}")
         return datetime.strptime(date, "%d %B, %Y").strftime("%Y-%m-%d")
     
     def is_schedule_date_near(self):
@@ -391,11 +392,9 @@ class VisaScheduler:
 
                 result = self.reschedule(date, date_time, asc_date[0], asc_date[1])
                 self.send_notification(f"Earlier date found: {date}")
-                result = Result.SUCCESS
             else:
                 result = self.reschedule(date, date_time)
                 self.send_notification(f"Earlier date found: {date}")
-                result = Result.SUCCESS
 
         except Exception as e:
             logger.error(e)
