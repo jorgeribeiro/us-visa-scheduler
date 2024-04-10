@@ -6,6 +6,7 @@
 
 ## Next steps
 - Test!
+- Implement blacklisted dates
 - Implement useful email notifications:
     - Successful reschedule
     - Failed login attempt
