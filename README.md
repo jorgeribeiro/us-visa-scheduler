@@ -19,9 +19,6 @@
 - Use Serverless Framework to facilitate the deployment
 
 ## Extra notes
-```
-Upgrading the visa scheduler into a monetized app
-
 Challenges:
 1. Must be logged in a user's account to make requests
 2. Potential blocks from the API
@@ -29,12 +26,5 @@ Challenges:
 4. Testing is challeging since the requests are all live
 
 Solution:
-1. Use a user's account to make requests
-2. Run concurrent instances for each user
-3. On successful reschedules, stop for one week
-
-Learnings from latest test (see Latest test below to check the full log):
-1. Checking if POST request status code 200 is not 100% accurate. Html page returned contains new schedule date, so that can be compared with the actual date that was requested
-  1.1. HTML of the response already captured in response.html
-2. SendGrid requests are returning a Forbidden 403 response
-```
+1. Run concurrent instances for each user
+2. On successful reschedules, stop for one week
