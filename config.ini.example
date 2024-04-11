@@ -15,7 +15,7 @@ FACILITY_ID = 25
 ASC_ID = 26
 
 [CHROMEDRIVER]
-; Way to use selenium LOCAL, AWS or REMOTE
+; Way to use selenium LOCAL or AWS
 USE = AWS
 
 [PUSHOVER]
