@@ -11,8 +11,8 @@ def lambda_handler(event, context):
     result = handler.main()
     logger.info(f'Lambda function executed with result: {result}')
     
-    disable_schedule = False
     next_rate = Time.RETRY_TIME
+    disable_schedule = False
     if result == Result.RETRY:
         next_rate = Time.RETRY_TIME
     elif result == Result.COOLDOWN:
