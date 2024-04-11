@@ -307,7 +307,7 @@ class VisaScheduler:
         if SENDGRID_API_KEY:
             email_recipients = [PRIMARY_EMAIL_RECIPIENT]
             message = Mail(
-                from_email=USERNAME,
+                from_email=PRIMARY_EMAIL_RECIPIENT,
                 to_emails=email_recipients,
                 subject=msg,
                 html_content=msg)
