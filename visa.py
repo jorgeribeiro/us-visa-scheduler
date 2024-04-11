@@ -137,17 +137,17 @@ class VisaScheduler:
             EC.presence_of_element_located((By.XPATH, REGEX_CONTINUE)))
         logger.info("\tlogin successful!")
 
-    def get_date(self):
+    def get_appointment_dates(self):
         if not self.is_logged_in():
             self.login()
-            return self.get_date()
+            return self.get_appointment_dates()
         else:
             logger.info("Getting dates...")
             r = requests.get(DATE_URL, headers=self.get_header())
             if r.status_code == 401:
                 print("Unauthorized. Logging back in...")
                 self.login()
-                return self.get_date()
+                return self.get_appointment_dates()
             
             date = r.json()
             return date
@@ -353,7 +353,7 @@ class VisaScheduler:
                 result = Result.STOP
                 return result
 
-            dates = self.get_date()[:5]
+            dates = self.get_appointment_dates()[:5]
             if not dates:
                 logger.info("No dates available on FACILITY")
                 result = Result.COOLDOWN
