@@ -76,7 +76,6 @@ class VisaScheduler:
         }
 
     def get_my_schedule_date(self):
-        logger.info("Getting my schedule date...")
         self.driver.get(HOME_URL) # Go to home page where schedule date is displayed
         element = self.driver.find_element(By.XPATH,
                                            '//a[contains(@href, "%s")]/ancestor::div[contains(@class, "application")]' % SCHEDULE_ID)
@@ -84,7 +83,6 @@ class VisaScheduler:
         appointment = element.find_element(By.CLASS_NAME, 'consular-appt').text
         regex = r".+: (.+,.+),.+"
         date = re.search(regex, appointment).group(1)
-        logger.info(f"My schedule date: {date}")
         return datetime.strptime(date, "%d %B, %Y").strftime("%Y-%m-%d")
     
     def is_schedule_date_near(self):
@@ -165,13 +163,11 @@ class VisaScheduler:
 
     def reschedule(self, date, time, asc_date=None, asc_time=None):
         logger.info(f"Starting Reschedule ({date})")
-
         self.driver.get(APPOINTMENT_URL)
-
         tm.sleep(STEP_TIME)
+
         try:
             btn = self.driver.find_element(By.XPATH, '//*[@id="main"]/div[3]/form/div[2]/div/input')
-
             logger.info("\tmultiple applicants")
             btn.click()
         except NoSuchElementException:
@@ -204,8 +200,9 @@ class VisaScheduler:
             "Referer": APPOINTMENT_URL,
             "Cookie": "_yatri_session=" + self.driver.get_cookie("_yatri_session")["value"]
         }
-
         requests.post(APPOINTMENT_URL, headers=headers, data=data)
+        logger.info("Rescheduled attempt complete.")
+
         schedule_date = self.get_my_schedule_date()
         if schedule_date == date:
             msg = f"Rescheduled Successfully! {date} {time}"
@@ -336,7 +333,6 @@ class VisaScheduler:
             logger.info("%s \t business_day: %s" % (d.get('date'), d.get('business_day')))
 
     def main(self) -> Result:
-        # RETRY_TIME
         logger.info(f"---START--- : {datetime.today().strftime('%d/%m/%Y %H:%M:%S')}")
 
         try:
@@ -348,7 +344,10 @@ class VisaScheduler:
 
         try:
             self.login()
+            logger.info("Getting current schedule date...")
             self.my_schedule_date = self.get_my_schedule_date()
+            logger.info(f"Current schedule date: {date}")
+
             if (self.is_schedule_date_near()):
                 logger.info(f"Current date: {self.my_schedule_date} is near enough. Stopping...")
                 result = Result.STOP
@@ -362,13 +361,11 @@ class VisaScheduler:
 
             self.print_dates(dates)
             date = self.get_available_date(dates)
-
             if not date:
                 result = Result.RETRY
                 return result
 
             date_time = self.get_time(date)
-
             if not date_time:
                 result = Result.RETRY
                 return result
