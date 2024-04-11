@@ -26,15 +26,7 @@ Challenges:
 1. Must be logged in a user's account to make requests
 2. Potential blocks from the API
 3. Users need to share their credentials
-4. Does being a group processor make it easier to access the API?
-5. Testing is challeging since the requests are all live
-
-To solve:
-1. Logic to prioritize users who have paid for the service OR run concurrent instances for each user (stop for one week on successful reschedules)?
-2. Which user credentials to use for the requests (test if session cookie needs to be match the schedule owner)
-3. The appointment request might not work 100% (tests needed)
-4. Which DB technology to use
-5. Run it as a lambda function
+4. Testing is challeging since the requests are all live
 
 Solution:
 1. Use a user's account to make requests
