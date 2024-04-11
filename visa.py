@@ -5,7 +5,7 @@ import random
 import re
 import sys
 import time as tm
-from datetime import datetime
+from datetime import datetime, timedelta
 from enum import Enum
 from tempfile import mkdtemp
 
@@ -39,6 +39,8 @@ COUNTRY_CODE = config['USVISA']['COUNTRY_CODE']
 FACILITY_ID = config['USVISA']['FACILITY_ID']
 ASC_ID = config['USVISA']['ASC_ID']
 NEED_ASC = config['USVISA'].getboolean('NEED_ASC')
+
+BLACKLISTED_DATES = config['BLACKLISTED_DATES']
 
 SENDGRID_API_KEY = config['SENDGRID']['SENDGRID_API_KEY']
 PRIMARY_EMAIL_RECIPIENT = config['SENDGRID']['PRIMARY_EMAIL_RECIPIENT']
@@ -149,8 +151,8 @@ class VisaScheduler:
                 self.login()
                 return self.get_appointment_dates()
             
-            date = r.json()
-            return date
+            dates = r.json()
+            return dates
 
     def get_time(self, date):
         time_url = TIME_URL.format(date=date)
@@ -287,6 +289,15 @@ class VisaScheduler:
         return dr
 
     def get_available_date(self, dates):
+        blacklisted_dates = []
+        for _, value in BLACKLISTED_DATES.items():
+            date_range = value.split(',')
+            start_date = datetime.strptime(date_range[0].strip(), '%Y-%m-%d')
+            end_date = datetime.strptime(date_range[-1].strip(), '%Y-%m-%d') + timedelta(days=1)
+            while start_date < end_date:
+                blacklisted_dates.append(start_date.strftime('%Y-%m-%d'))
+                start_date += timedelta(days=1)
+
         def is_earlier(date):
             my_date = datetime.strptime(self.my_schedule_date, "%Y-%m-%d")
             new_date = datetime.strptime(date, "%Y-%m-%d")
@@ -297,7 +308,7 @@ class VisaScheduler:
         logger.info("Checking for an earlier date:")
         for d in dates:
             date = d.get('date')
-            if is_earlier(date):
+            if is_earlier(date) and not date in blacklisted_dates:
                 return date
 
     @staticmethod
@@ -346,7 +357,7 @@ class VisaScheduler:
             self.login()
             logger.info("Getting current schedule date...")
             self.my_schedule_date = self.get_my_schedule_date()
-            logger.info(f"Current schedule date: {date}")
+            logger.info(f"Current schedule date: {self.my_schedule_date}")
 
             if (self.is_schedule_date_near()):
                 logger.info(f"Current date: {self.my_schedule_date} is near enough. Stopping...")

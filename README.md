@@ -5,7 +5,6 @@
 - Simply run `python -c "import setup; setup.as_loop()"`
 
 ## Next steps
-- Implement blacklisted dates
 - Implement useful email notifications:
     - Successful reschedule
     - Failed login attempt
