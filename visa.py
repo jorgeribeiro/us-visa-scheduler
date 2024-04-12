@@ -207,15 +207,15 @@ class VisaScheduler:
 
         schedule_date = self.get_my_schedule_date()
         if schedule_date == date:
-            msg = f"Rescheduled Successfully! {date} {time}"
+            msg = f"[{USERNAME}] Rescheduled Successfully! {date} {time}"
             logger.info(msg)
             self.send_notification(msg)
-            return Result.SUCCESS
+            return Result.SUCCESSFUL_RESCHEDULE
         else:
-            msg = f"Reschedule Failed. {date} {time}"
+            msg = f"[{USERNAME}] Reschedule Failed. {date} {time}"
             logger.error(msg)
             self.send_notification(msg)
-            return Result.RETRY
+            return Result.FAILED_RESCHEDULE
 
     def asc_availability(self, date, time):
         logger.info("ASC Availability")

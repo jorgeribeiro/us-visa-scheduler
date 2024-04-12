@@ -21,8 +21,10 @@ def lambda_handler(event, context):
         next_rate = Time.EXCEPTION_TIME
     elif result == Result.WEBDRIVER_EXCEPTION:
         next_rate = Time.WEBDRIVER_EXCEPTION_TIME
-    elif result == Result.SUCCESS:
-        next_rate = Time.SUCCESS_TIME
+    elif result == Result.SUCCESSFUL_RESCHEDULE:
+        next_rate = Time.SUCCESSFUL_RESCHEDULE_TIME
+    elif result == Result.FAILED_RESCHEDULE:
+        next_rate = Time.FAILED_RESCHEDULE_TIME
     elif result == Result.STOP:
         disable_schedule = True
     

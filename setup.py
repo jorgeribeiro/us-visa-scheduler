@@ -16,5 +16,7 @@ def as_loop():
             time.sleep(Time.EXCEPTION_TIME)
         elif result == Result.WEBDRIVER_EXCEPTION:
             time.sleep(Time.WEBDRIVER_EXCEPTION_TIME)
+        elif result == Result.FAILED_RESCHEDULE:
+            time.sleep(Time.FAILED_RESCHEDULE_TIME)
         else:
             break
