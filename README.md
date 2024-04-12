@@ -6,7 +6,6 @@
 
 ## Next steps
 - Implement useful email notifications:
-    - Failed login attempt
     - Execution stopped since interview date is nearby
     - Any failures or unexpected results sent to the developer's email
 - Provide visibility on the scheduler executions:

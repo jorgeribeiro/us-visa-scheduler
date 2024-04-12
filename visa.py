@@ -15,7 +15,7 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait as Wait
-from selenium.common.exceptions import NoSuchElementException, WebDriverException
+from selenium.common.exceptions import NoSuchElementException, WebDriverException, TimeoutException
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 from webdriver_manager.chrome import ChromeDriverManager
@@ -350,36 +350,36 @@ class VisaScheduler:
             self.driver = self.get_driver()
         except WebDriverException as e:
             logger.error(e)
-            result = Result.WEBDRIVER_EXCEPTION
-            return result
+            return Result.WEBDRIVER_EXCEPTION
 
         try:
             self.login()
+        except TimeoutException as e:
+            self.send_notification(f"[{USERNAME}] Unable to login. TimeoutException.")
+            return Result.STOP
+
+        try:
             logger.info("Getting current schedule date...")
             self.my_schedule_date = self.get_my_schedule_date()
             logger.info(f"Current schedule date: {self.my_schedule_date}")
 
             if (self.is_schedule_date_near()):
                 logger.info(f"Current date: {self.my_schedule_date} is near enough. Stopping...")
-                result = Result.STOP
-                return result
+                return Result.STOP
 
             dates = self.get_appointment_dates()[:5]
             if not dates:
                 logger.info("No dates available on FACILITY")
-                result = Result.COOLDOWN
-                return result
+                return Result.COOLDOWN
 
             self.print_dates(dates)
             date = self.get_available_date(dates)
             if not date:
-                result = Result.RETRY
-                return result
+                return Result.RETRY
 
             date_time = self.get_time(date)
             if not date_time:
-                result = Result.RETRY
-                return result
+                return Result.RETRY
 
             logger.info(f"New date: {date} {date_time}")
 
@@ -387,16 +387,13 @@ class VisaScheduler:
                 found, asc_date = self.asc_availability(date, date_time)
                 if not found:
                     logger.info("No dates available on ASC")
-                    result = Result.COOLDOWN
-                    return result
+                    return Result.COOLDOWN
 
                 if not asc_date[0] and not asc_date[1]:
-                    result = Result.RETRY
-                    return result
+                    return Result.RETRY
 
                 if not asc_date[1]:
-                    result = Result.RETRY
-                    return result
+                    return Result.RETRY
 
                 result = self.reschedule(date, date_time, asc_date[0], asc_date[1])
                 self.send_notification(f"Earlier date found: {date}")
