@@ -5,9 +5,6 @@
 - Simply run `python -c "import setup; setup.as_loop()"`
 
 ## Next steps
-- Implement useful email notifications:
-    - Execution stopped since interview date is nearby
-    - Any failures or unexpected results sent to the developer's email
 - Provide visibility on the scheduler executions:
     - Google Spreadsheet with a list of the last executions
     - UI that lists the result of the last executions

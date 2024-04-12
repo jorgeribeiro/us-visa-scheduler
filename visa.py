@@ -364,7 +364,9 @@ class VisaScheduler:
             logger.info(f"Current schedule date: {self.my_schedule_date}")
 
             if (self.is_schedule_date_near()):
-                logger.info(f"Current date: {self.my_schedule_date} is near enough. Stopping...")
+                msg = f"[{USERNAME}] Current date: {self.my_schedule_date} is near enough. Stopping..."
+                logger.info(msg)
+                self.send_notification(msg)
                 return Result.STOP
 
             dates = self.get_appointment_dates()[:5]
@@ -403,6 +405,7 @@ class VisaScheduler:
 
         except Exception as e:
             logger.error(e)
+            self.send_notification(f"[{USERNAME}] Exception occurred. Check logs for more info.")
             result = Result.EXCEPTION
 
         return result
