@@ -398,10 +398,10 @@ class VisaScheduler:
                     return Result.RETRY
 
                 result = self.reschedule(date, date_time, asc_date[0], asc_date[1])
-                self.send_notification(f"Earlier date found: {date}")
+                self.send_notification(f"[{USERNAME}] Earlier date found: {date}")
             else:
                 result = self.reschedule(date, date_time)
-                self.send_notification(f"Earlier date found: {date}")
+                self.send_notification(f"[{USERNAME}] Earlier date found: {date}")
 
         except Exception as e:
             logger.error(e)
