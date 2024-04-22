@@ -32,5 +32,6 @@ docker push <account_id>.dkr.ecr.us-east-1.amazonaws.com/<username>-scheduler:la
 - Provide visibility on the scheduler executions:
     - Google Spreadsheet with a list of the last executions
     - UI that lists the result of the last executions
+- Resolve incorrect login check (it doesn't work when the website is down)
 - Extend it to work with Immigrant visa appointments
 - Use Serverless Framework to facilitate the deployment
