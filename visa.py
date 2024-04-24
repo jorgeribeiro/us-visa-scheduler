@@ -355,8 +355,8 @@ class VisaScheduler:
         try:
             self.login()
         except TimeoutException as e:
-            self.send_notification(f"[{USERNAME}] Unable to login. TimeoutException.")
-            return Result.STOP
+            logger.error(e)
+            return Result.EXCEPTION
 
         try:
             logger.info("Getting current schedule date...")
