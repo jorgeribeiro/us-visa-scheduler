@@ -33,5 +33,6 @@ docker push <account_id>.dkr.ecr.us-east-1.amazonaws.com/<username>-scheduler:la
     - Google Spreadsheet with a list of the last executions
     - UI that lists the result of the last executions
 - Successful reschedule delay is not working: the scheduler runs twice(?) after a successful reschedule
+    - Improve long delays: use hours or days instead of minutes
 - Extend it to work with Immigrant visa appointments
 - Use Serverless Framework to facilitate the deployment
