@@ -405,7 +405,6 @@ class VisaScheduler:
 
         except Exception as e:
             logger.error(e)
-            self.send_notification(f"[{USERNAME}] Exception occurred. Check logs for more info.")
             result = Result.EXCEPTION
 
         return result
