@@ -11,23 +11,24 @@ def lambda_handler(event, context):
     result = handler.main()
     logger.info(f'Lambda function executed with result: {result}')
     
-    next_rate = Time.RETRY_TIME
+    next_rate = f"{Time.RETRY_TIME // 60} minutes"
     disable_schedule = False
     if result == Result.RETRY:
-        next_rate = Time.RETRY_TIME
+        next_rate = f"{Time.RETRY_TIME // 60} minutes"
     elif result == Result.COOLDOWN:
-        next_rate = Time.COOLDOWN_TIME
+        next_rate = f"{Time.COOLDOWN_TIME // 60} minutes"
     elif result == Result.EXCEPTION:
-        next_rate = Time.EXCEPTION_TIME
+        next_rate = f"{Time.EXCEPTION_TIME // 60} minutes"
     elif result == Result.WEBDRIVER_EXCEPTION:
-        next_rate = Time.WEBDRIVER_EXCEPTION_TIME
-    elif result == Result.SUCCESSFUL_RESCHEDULE:
-        next_rate = Time.SUCCESSFUL_RESCHEDULE_TIME
+        next_rate = f"{Time.WEBDRIVER_EXCEPTION_TIME // 60} minutes"
     elif result == Result.FAILED_RESCHEDULE:
-        next_rate = Time.FAILED_RESCHEDULE_TIME
+        next_rate = f"{Time.FAILED_RESCHEDULE_TIME // 60} minutes"
+    elif result == Result.SUCCESSFUL_RESCHEDULE:
+        next_rate = "7 days"
     elif result == Result.STOP:
         disable_schedule = True
-    
+
+    logger.info(f"Next rate: {next_rate}, Disable schedule: {disable_schedule}")
     event_arn = event["resources"][0]
     event_arn = event_arn[event_arn.rindex("/") + 1:]
     scheduler_client = boto3.client('scheduler')
@@ -35,7 +36,7 @@ def lambda_handler(event, context):
     scheduler_client.update_schedule(
         FlexibleTimeWindow=schedule["FlexibleTimeWindow"], 
         Name=event_arn, 
-        ScheduleExpression=f"rate({next_rate // 60} minutes)", 
+        ScheduleExpression=f"rate({next_rate})", 
         Target=schedule["Target"], 
         State="DISABLED" if disable_schedule else "ENABLED"
     )
