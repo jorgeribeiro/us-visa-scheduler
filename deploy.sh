@@ -18,9 +18,6 @@ docker build --platform linux/amd64 -t "$username"/scheduler:"$version" .
 echo "Step 2: Authenticating Docker CLI to the Amazon ECR registry..."
 aws ecr get-login-password --region "$region" | docker login --username AWS --password-stdin "$account_id".dkr.ecr."$region".amazonaws.com
 
-# echo "Step 3: Creating repository in Amazon ECR..."
-# aws ecr create-repository --repository-name "$username"-scheduler --region "$region" --image-scanning-configuration scanOnPush=true --image-tag-mutability MUTABLE
-
 echo "Step 3: Checking if repository already exists in Amazon ECR..."
 repository_exists=$(aws ecr describe-repositories --repository-names "$username"-scheduler --region "$region" 2>/dev/null)
 
