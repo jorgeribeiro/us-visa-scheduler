@@ -5,26 +5,9 @@
 - Simply run `python -c "import setup; setup.as_loop()"`
 
 ## How to deploy as a lambda function
-- Build the Docker image:
-```
-docker build --platform linux/amd64 -t <username>/scheduler:<version> .
-```
-- Authenticate Docker CLI to the Amazon ECR registry:
-```
-aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin <account_id>.dkr.ecr.us-east-1.amazonaws.com
-```
-- Create a repository in Amazon ECR (step required only for the first deployment):
-```
-aws ecr create-repository --repository-name <username>-scheduler --region us-east-1 --image-scanning-configuration scanOnPush=true --image-tag-mutability MUTABLE
-```
-- Tag local image into Amazon ECR repository as the latest version:
-```
-docker tag <username>/scheduler:<version> <account_id>.dkr.ecr.us-east-1.amazonaws.com/<username>-scheduler:latest
-```
-- Deploy local image to the Amazon ECR repository:
-```
-docker push <account_id>.dkr.ecr.us-east-1.amazonaws.com/<username>-scheduler:latest
-```
+- Run `deploy.sh` bash script with the arguments: `account_id`, `username`, `version` and `region` (optional, if not informed value is set to `us-east-1`)
+    - Make sure the script is executable by running `chmod +x deploy.sh`
+- Deploy the new image to the appropriate lambda function
 
 **Missing steps:** Lambda function configuration, EventBridge schedule configuration
 
