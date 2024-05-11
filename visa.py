@@ -10,6 +10,7 @@ from enum import Enum
 from tempfile import mkdtemp
 
 import requests
+import gspread
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
@@ -46,6 +47,7 @@ SENDGRID_API_KEY = config['SENDGRID']['SENDGRID_API_KEY']
 PRIMARY_EMAIL_RECIPIENT = config['SENDGRID']['PRIMARY_EMAIL_RECIPIENT']
 PUSH_TOKEN = config['PUSHOVER']['PUSH_TOKEN']
 PUSH_USER = config['PUSHOVER']['PUSH_USER']
+SPREADSHEET_ID = config['GOOGLE_SHEETS']['SPREADSHEET_ID']
 
 USE = config['ENVIRONMENT']['USE']
 
@@ -269,7 +271,7 @@ class VisaScheduler:
         if USE == Use.LOCAL.value:
             chrome_options = webdriver.ChromeOptions()
             chrome_options.add_argument('--headless')
-            dr = webdriver.Chrome(ChromeDriverManager().install(), options=chrome_options)
+            dr = webdriver.Chrome(service=Service(executable_path=ChromeDriverManager().install()), options=chrome_options)
         elif USE == Use.AWS.value:
             chrome_options = webdriver.ChromeOptions()
             chrome_options.binary_location = "/opt/chrome/chrome"
@@ -338,13 +340,25 @@ class VisaScheduler:
             requests.post(url, data)
 
     @staticmethod
+    def write_result_to_gsheet(execution_timestamp, earliest_date, result):
+        if not SPREADSHEET_ID:
+            return
+        try:
+            gc = gspread.service_account(filename='keyfile.json')
+            sh = gc.open_by_key(SPREADSHEET_ID).sheet1
+            sh.append_row([execution_timestamp, earliest_date, result])
+        except Exception:
+            return
+
+    @staticmethod
     def print_dates(dates):
         logger.info("Available dates:")
         for d in dates:
             logger.info("%s \t business_day: %s" % (d.get('date'), d.get('business_day')))
 
     def main(self) -> Result:
-        logger.info(f"---START--- : {datetime.today().strftime('%d/%m/%Y %H:%M:%S')}")
+        execution_timestamp = datetime.today().strftime('%d/%m/%Y %H:%M:%S')
+        logger.info(f"---START--- : {execution_timestamp} for {USERNAME}")
 
         try:
             self.driver = self.get_driver()
@@ -372,15 +386,19 @@ class VisaScheduler:
             dates = self.get_appointment_dates()[:5]
             if not dates:
                 logger.info("No dates available on FACILITY")
+                self.write_result_to_gsheet(execution_timestamp, 'None', Result.COOLDOWN.value)
                 return Result.COOLDOWN
 
+            earliest_date = dates[0].get('date')
             self.print_dates(dates)
             date = self.get_available_date(dates)
             if not date:
+                self.write_result_to_gsheet(execution_timestamp, earliest_date, Result.RETRY.value)
                 return Result.RETRY
 
             date_time = self.get_time(date)
             if not date_time:
+                self.write_result_to_gsheet(execution_timestamp, earliest_date, Result.RETRY.value)
                 return Result.RETRY
 
             logger.info(f"New date: {date} {date_time}")
@@ -389,12 +407,15 @@ class VisaScheduler:
                 found, asc_date = self.asc_availability(date, date_time)
                 if not found:
                     logger.info("No dates available on ASC")
+                    self.write_result_to_gsheet(execution_timestamp, 'None', Result.COOLDOWN.value)
                     return Result.COOLDOWN
 
                 if not asc_date[0] and not asc_date[1]:
+                    self.write_result_to_gsheet(execution_timestamp, 'None', Result.RETRY.value)
                     return Result.RETRY
 
                 if not asc_date[1]:
+                    self.write_result_to_gsheet(execution_timestamp, 'None', Result.RETRY.value)
                     return Result.RETRY
 
                 result = self.reschedule(date, date_time, asc_date[0], asc_date[1])
@@ -402,7 +423,7 @@ class VisaScheduler:
             else:
                 result = self.reschedule(date, date_time)
                 self.send_notification(f"[{USERNAME}] Earlier date found: {date}")
-
+            self.write_result_to_gsheet(execution_timestamp, date, result.value)
         except Exception as e:
             logger.error(e)
             result = Result.EXCEPTION

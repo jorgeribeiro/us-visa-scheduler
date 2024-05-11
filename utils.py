@@ -9,10 +9,10 @@ class Time:
     FAILED_RESCHEDULE_TIME = 60  # wait time when failed to reschedule: 1 minute
 
 class Result(Enum):
-    SUCCESSFUL_RESCHEDULE = 1
-    FAILED_RESCHEDULE = 2
-    RETRY = 3
-    COOLDOWN = 4
-    EXCEPTION = 5
-    WEBDRIVER_EXCEPTION = 6
-    STOP = 7
+    SUCCESSFUL_RESCHEDULE = 'Successful reschedule'
+    FAILED_RESCHEDULE = 'Failed reschedule'
+    RETRY = 'Retry'
+    COOLDOWN = 'Cooldown'
+    EXCEPTION = 'Exception'
+    WEBDRIVER_EXCEPTION = 'Webdriver exception'
+    STOP = 'Stop'

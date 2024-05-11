@@ -1,4 +1,5 @@
 config.ini
+keyfile.json
 
 __pycache__/
 *.py[cod]
