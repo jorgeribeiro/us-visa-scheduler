@@ -47,7 +47,7 @@ PRIMARY_EMAIL_RECIPIENT = config['SENDGRID']['PRIMARY_EMAIL_RECIPIENT']
 PUSH_TOKEN = config['PUSHOVER']['PUSH_TOKEN']
 PUSH_USER = config['PUSHOVER']['PUSH_USER']
 
-USE = config['CHROMEDRIVER']['USE']
+USE = config['ENVIRONMENT']['USE']
 
 REGEX_CONTINUE = "//a[contains(text(),'Continue')]"
 
