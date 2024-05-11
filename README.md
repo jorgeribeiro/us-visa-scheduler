@@ -6,7 +6,10 @@
 
 ## How to deploy as a lambda function
 - Run `deploy.sh` bash script with the arguments: `account_id`, `username`, `version` and `region` (optional, if not informed value is set to `us-east-1`)
-    - Make sure the script is executable by running `chmod +x deploy.sh` and the Docker daemon is running
+- To successfully run the deployment script, the following must be correctly configured
+    - Make sure the script is executable by running `chmod +x deploy.sh`
+    - Docker daemon is running
+    - AWS credentials are setup for the account ID you're using to deploy the image
 - Deploy the new image to the appropriate lambda function
 
 **Missing steps:** Lambda function configuration, EventBridge schedule configuration
