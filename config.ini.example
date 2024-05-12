@@ -21,8 +21,9 @@ DATE_RANGE_TWO = 2024-12-01,2024-12-31
 DATE_RANGE_THREE = 2024-08-01
 
 [ENVIRONMENT]
-; Environment to use LOCAL or AWS
+; Environment variables
 USE = AWS
+TIMEZONE = Asia/Dubai
 
 [PUSHOVER]
 ; Get push notifications via https://pushover.net/ (optional)

@@ -1,6 +1,7 @@
 # -*- coding: utf8 -*-
 import configparser
 import logging
+import os
 import random
 import re
 import sys
@@ -9,8 +10,8 @@ from datetime import datetime, timedelta
 from enum import Enum
 from tempfile import mkdtemp
 
-import requests
 import gspread
+import requests
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
@@ -50,6 +51,7 @@ PUSH_USER = config['PUSHOVER']['PUSH_USER']
 SPREADSHEET_ID = config['GOOGLE_SHEETS']['SPREADSHEET_ID']
 
 USE = config['ENVIRONMENT']['USE']
+TIMEZONE = config['ENVIRONMENT']['TIMEZONE']
 
 REGEX_CONTINUE = "//a[contains(text(),'Continue')]"
 
@@ -69,6 +71,8 @@ class Use(Enum):
 class VisaScheduler:
     def __init__(self):
         self.my_schedule_date = None
+        os.environ['TZ'] = TIMEZONE
+        tm.tzset()
 
     def get_header(self):
         return {
