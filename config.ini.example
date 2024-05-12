@@ -21,7 +21,7 @@ DATE_RANGE_TWO = 2024-12-01,2024-12-31
 DATE_RANGE_THREE = 2024-08-01
 
 [ENVIRONMENT]
-; Environment variables
+; Environment variables: LOCAL, AWS
 USE = AWS
 TIMEZONE = Asia/Dubai
 
