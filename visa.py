@@ -274,7 +274,6 @@ class VisaScheduler:
         dr = None
         if USE == Use.LOCAL.value:
             chrome_options = webdriver.ChromeOptions()
-            chrome_options.add_argument('--headless')
             dr = webdriver.Chrome(service=Service(executable_path=ChromeDriverManager().install()), options=chrome_options)
         elif USE == Use.AWS.value:
             chrome_options = webdriver.ChromeOptions()
@@ -350,6 +349,8 @@ class VisaScheduler:
         try:
             gc = gspread.service_account(filename='keyfile.json')
             sh = gc.open_by_key(SPREADSHEET_ID).sheet1
+            if sh.row_count >= 150: # If the sheet has 150+ rows, delete all rows but the header
+                sh.batch_clear([f"A2:C{sh.row_count}"])
             sh.append_row([execution_timestamp, earliest_date, result])
         except Exception:
             return
