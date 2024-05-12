@@ -349,8 +349,9 @@ class VisaScheduler:
         try:
             gc = gspread.service_account(filename='keyfile.json')
             sh = gc.open_by_key(SPREADSHEET_ID).sheet1
-            if sh.row_count >= 150: # If the sheet has 150+ rows, delete all rows but the header
-                sh.batch_clear([f"A2:C{sh.row_count}"])
+            number_of_rows = len(sh.col_values(1))
+            if number_of_rows >= 150: # If the sheet has 150+ rows, delete all rows but the header
+                sh.batch_clear([f"A2:C{number_of_rows}"])
             sh.append_row([execution_timestamp, earliest_date, result])
         except Exception:
             return
