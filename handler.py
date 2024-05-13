@@ -38,5 +38,6 @@ def lambda_handler(event, context):
         Name=event_arn, 
         ScheduleExpression=f"rate({next_rate})", 
         Target=schedule["Target"], 
+        ScheduleExpressionTimezone=schedule["ScheduleExpressionTimezone"],
         State="DISABLED" if disable_schedule else "ENABLED"
     )
