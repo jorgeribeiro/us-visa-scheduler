@@ -17,7 +17,7 @@
 ## (Optional) Configuring Google Sheet and a Google Service Account to write execution results
 The app uses `gspread` to write execution results to a Google Sheet. Refer to the library documentation to learn how to setup authentication and let the app write to the spreadsheet. 
 The spreadsheet to be updated is indicated by its ID configured for the config variable `SPREADSHEET_ID`.
-After following the required steps, you should have a JSON key file that must be named `keyfile.json` and placed in the root directory of the application.
+After the authentication is configured as per the instructions provided by the `gspread` docs, you should have a JSON key file that must be named `keyfile.json` and placed in the root directory of the application.
 
 This configuration is only necessary if you wish to write the results to a Google Sheet to have better visibility on the execution results. The app works just fine without it.
 
