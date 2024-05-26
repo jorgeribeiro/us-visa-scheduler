@@ -22,5 +22,6 @@ After the authentication is configured as per the instructions provided by the `
 This configuration is only necessary if you wish to write the results to a Google Sheet to have better visibility on the execution results. The app works just fine without it.
 
 ## Next steps
+- Deploy new image to lambda function via deployment script
 - Extend it to work with Immigrant visa appointments
 - Use Serverless Framework to facilitate the deployment
