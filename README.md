@@ -2,6 +2,7 @@
 
 ## How to run locally
 - Install the required python packages: `pip install -r requirements.txt`
+- Make sure the value of `['ENVIRONMENT']['USE']` in the `config.ini` is set to `LOCAL`
 - Simply run `python -c "import setup; setup.as_loop()"`
 
 ## How to deploy as a Lambda function in AWS
