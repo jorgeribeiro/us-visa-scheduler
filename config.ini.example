@@ -36,5 +36,5 @@ SENDGRID_API_KEY =
 PRIMARY_EMAIL_RECIPIENT = primary@example.com
 
 [GOOGLE_SHEETS]
-; Add execution data to Google Sheets
+; Add execution data to Google Sheets (optional)
 SPREADSHEET_ID = 

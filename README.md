@@ -6,12 +6,13 @@
 - Simply run `python -c "import setup; setup.as_loop()"`
 
 ## How to deploy as a Lambda function in AWS
-- Run `deploy.sh` bash script with the arguments: `account_id`, `username`, `version` and `region` (optional, if not informed value is set to `us-east-1`)
+- Run `deploy.sh` bash script with the arguments: `aws_account_id`, `username`, `version` and `region` (optional, if not informed value is set to `us-east-1`)
 - To successfully run the deployment script, the following must be correctly configured
     - Make sure the script is executable by running `chmod +x deploy.sh`
     - Docker daemon is running
     - AWS credentials are setup for the account ID you're using to deploy the image
 - Deploy the new image to the appropriate lambda function
+- Enable EventBridge schedule, if it's currently disabled
 
 **Missing steps:** Lambda function configuration, EventBridge schedule configuration
 
