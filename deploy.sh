@@ -34,4 +34,4 @@ docker tag "$username"/scheduler:"$version" "$account_id".dkr.ecr."$region".amaz
 echo "Step 5: Deploying local image to the Amazon ECR repository..."
 docker push "$account_id".dkr.ecr."$region".amazonaws.com/"$username"-scheduler:latest
 
-echo "Deployment completed successfully. Please go ahead and update the image in the lambda function."
+echo "Deployment completed successfully. Please go ahead and deploy the new image in the lambda function."
