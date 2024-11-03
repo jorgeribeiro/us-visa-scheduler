@@ -55,7 +55,7 @@ TIMEZONE = config['ENVIRONMENT']['TIMEZONE']
 
 REGEX_CONTINUE = "//a[contains(text(),'Continue')]"
 
-STEP_TIME = 0.5  # time between steps (interactions with forms): 0.5 seconds
+STEP_TIME = 0.5  # time between steps (interactions with forms)
 
 DATE_URL = f"https://ais.usvisa-info.com/{COUNTRY_CODE}/niv/schedule/{SCHEDULE_ID}/appointment/days/{FACILITY_ID}.json?appointments[expedite]=false"
 TIME_URL = f"https://ais.usvisa-info.com/{COUNTRY_CODE}/niv/schedule/{SCHEDULE_ID}/appointment/times/{FACILITY_ID}.json?date={{date}}&appointments[expedite]=false"
@@ -278,7 +278,7 @@ class VisaScheduler:
         elif USE == Use.AWS.value:
             chrome_options = webdriver.ChromeOptions()
             chrome_options.binary_location = "/opt/chrome/chrome"
-            chrome_options.add_argument('--headless')
+            chrome_options.add_argument('--headless=new')
             chrome_options.add_argument('--no-sandbox')
             chrome_options.add_argument('--disable-gpu')
             chrome_options.add_argument('--window-size=1280x1696')
@@ -290,6 +290,8 @@ class VisaScheduler:
             chrome_options.add_argument(f'--user-data-dir={mkdtemp()}')
             chrome_options.add_argument(f'--data-path={mkdtemp()}')
             chrome_options.add_argument(f'--disk-cache-dir={mkdtemp()}')
+            chrome_options.add_argument("--remote-debugging-port=9222")
+            chrome_options.add_argument('user-agent={0}'.format('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36'))
             dr = webdriver.Chrome(service=Service(executable_path="/opt/chromedriver"), options=chrome_options)
         return dr
 
