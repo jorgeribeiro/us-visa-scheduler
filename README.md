@@ -3,16 +3,16 @@
 ## How to run locally
 - Install the required python packages: `pip install -r requirements.txt`
 - Make sure the value of `['ENVIRONMENT']['USE']` in the `config.ini` is set to `LOCAL`
-- Simply run `python -c "import setup; setup.as_loop()"`
+- Run `python -c "import setup; setup.as_loop()"`
 
 ## How to deploy as a Lambda function in AWS
-- Run `deploy.sh` bash script with the arguments: `aws_account_id` (your AWS account ID), `username` (this is just a unique identifier for the image that you are generating), `version` (a number that indicates the new version you are deploying) and `region` (optional, if not informed value is set to `us-east-1`)
+- Run `deploy.sh` bash script with the arguments: `aws_account_id` (your AWS account ID), `username` (this is just a unique identifier for the image you are generating), `version` (a number that indicates the new version you are deploying) and `region` (optional, if not informed value is set to `us-east-1`)
 - To successfully run the deployment script, the following must be correctly configured
     - Make sure the script is executable by running `chmod +x deploy.sh`
     - Docker daemon is running
     - AWS credentials are setup for the account ID you're using to deploy the image
 - Deploy the new image to the appropriate lambda function
-- Enable EventBridge schedule, if it's currently disabled
+- Enable EventBridge schedule associated with the lambda function, if it's currently disabled
 
 **Missing steps:** Lambda function configuration, EventBridge schedule configuration
 
