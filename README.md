@@ -7,6 +7,7 @@
 - Run `python -c "import setup; setup.as_loop()"`
 
 ## How to deploy as a Lambda function in AWS
+- Run cp config.ini.example config.ini and set the values correctly for the account you wish to run the scheduler
 - Make sure the value of `['ENVIRONMENT']['USE']` in the `config.ini` is set to `AWS`
 - Run `deploy.sh` bash script with the arguments: `aws_account_id` (your AWS account ID), `username` (this is just a unique identifier for the image you are generating), `version` (a number that indicates the new version you are deploying) and `region` (optional, if not informed value is set to `us-east-1`)
 - To successfully run the deployment script, the following must be correctly configured
