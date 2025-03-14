@@ -2,7 +2,7 @@
 
 # Check if all mandatory arguments are provided
 if [ $# -lt 3 ]; then
-    echo "Usage: $0 <account_id> <username> <version> [region]"
+    echo "Usage: $0 <account_id> <username> <version> [region] [profile]"
     exit 1
 fi
 
@@ -11,6 +11,12 @@ account_id="$1"
 username="$2"
 version="$3"
 region="${4:-us-east-1}"  # Set default value for region if not provided
+profile="${5:-default}"  # Set default value for profile if not provided
+
+# Set AWS profile for this script session
+export AWS_PROFILE="$profile"
+
+echo "Using AWS profile: $AWS_PROFILE"
 
 echo "Step 1: Building Docker image..."
 docker build --platform linux/amd64 -t "$username"/scheduler:"$version" .
