@@ -9,11 +9,12 @@
 ## How to deploy as a Lambda function in AWS
 - Run cp config.ini.example config.ini and set the values correctly for the account you wish to run the scheduler
 - Make sure the value of `['ENVIRONMENT']['USE']` in the `config.ini` is set to `AWS`
-- Run `deploy.sh` bash script with the arguments: `aws_account_id` (your AWS account ID), `username` (this is just a unique identifier for the image you are generating), `version` (a number that indicates the new version you are deploying) and `region` (optional, if not informed value is set to `us-east-1`)
+- Run `deploy.sh` bash script with the arguments: `aws_account_id` (your AWS account ID), `username` (this is just a unique identifier for the image you are generating), `version` (a number that indicates the new version you are deploying), `region` (optional, if not informed value is set to `us-east-1`) and `profile` (indicates the AWS profile to be used, also optional, if not informed value is set to `default`)
 - To successfully run the deployment script, the following must be correctly configured
     - Make sure the script is executable by running `chmod +x deploy.sh`
     - Docker daemon is running
     - AWS credentials are setup for the account ID you're using to deploy the image
+    - If a Google Sheet is to be updated with the execution results (as explained in the section below) a `keyfile.json` must be present in the root directory
 - Deploy the new image to the appropriate lambda function
 - Enable EventBridge schedule associated with the lambda function, if it's currently disabled
 
