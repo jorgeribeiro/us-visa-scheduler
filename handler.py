@@ -10,7 +10,7 @@ def lambda_handler(event, context):
     handler = VisaScheduler()
     result = handler.main()
     logger.info(f'Lambda function executed with result: {result}')
-    
+
     next_rate = f"{Time.RETRY_TIME // 60} minutes"
     disable_schedule = False
     if result == Result.RETRY:
@@ -34,10 +34,10 @@ def lambda_handler(event, context):
     scheduler_client = boto3.client('scheduler')
     schedule = scheduler_client.get_schedule(Name=event_arn)
     scheduler_client.update_schedule(
-        FlexibleTimeWindow=schedule["FlexibleTimeWindow"], 
-        Name=event_arn, 
-        ScheduleExpression=f"rate({next_rate})", 
-        Target=schedule["Target"], 
+        FlexibleTimeWindow=schedule["FlexibleTimeWindow"],
+        Name=event_arn,
+        ScheduleExpression=f"rate({next_rate})",
+        Target=schedule["Target"],
         ScheduleExpressionTimezone=schedule["ScheduleExpressionTimezone"],
         State="DISABLED" if disable_schedule else "ENABLED"
     )

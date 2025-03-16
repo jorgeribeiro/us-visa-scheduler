@@ -92,7 +92,7 @@ class VisaScheduler:
         regex = r".+: (.+,.+),.+"
         date = re.search(regex, appointment).group(1)
         return datetime.strptime(date, "%d %B, %Y").strftime("%Y-%m-%d")
-    
+
     def is_schedule_date_near(self):
         my_schedule_date = datetime.strptime(self.my_schedule_date, "%Y-%m-%d")
         today = datetime.today()
@@ -156,7 +156,7 @@ class VisaScheduler:
                 print("Unauthorized. Logging back in...")
                 self.login()
                 return self.get_appointment_dates()
-            
+
             dates = r.json()
             return dates
 
@@ -376,7 +376,7 @@ class VisaScheduler:
 
         try:
             self.login()
-        except TimeoutException as e:
+        except (TimeoutException, NoSuchElementException) as e:
             logger.error(e)
             return Result.EXCEPTION
 
