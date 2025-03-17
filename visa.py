@@ -57,6 +57,8 @@ REGEX_CONTINUE = "//a[contains(text(),'Continue')]"
 
 STEP_TIME = 0.5  # time between steps (interactions with forms)
 
+GSHEET_MAX_NUM_ROWS = 1000
+
 DATE_URL = f"https://ais.usvisa-info.com/{COUNTRY_CODE}/niv/schedule/{SCHEDULE_ID}/appointment/days/{FACILITY_ID}.json?appointments[expedite]=false"
 TIME_URL = f"https://ais.usvisa-info.com/{COUNTRY_CODE}/niv/schedule/{SCHEDULE_ID}/appointment/times/{FACILITY_ID}.json?date={{date}}&appointments[expedite]=false"
 HOME_URL = f"https://ais.usvisa-info.com/{COUNTRY_CODE}/niv/account"
@@ -352,7 +354,8 @@ class VisaScheduler:
             gc = gspread.service_account(filename='keyfile.json')
             sh = gc.open_by_key(SPREADSHEET_ID).sheet1
             number_of_rows = len(sh.col_values(1))
-            if number_of_rows >= 150: # If the sheet has 150+ rows, delete all rows but the header
+            # If the sheet has reached the max number of rows, delete all rows but the header
+            if number_of_rows >= GSHEET_MAX_NUM_ROWS:
                 sh.batch_clear([f"A2:C{number_of_rows}"])
             sh.append_row([execution_timestamp, earliest_date, result])
         except Exception:
