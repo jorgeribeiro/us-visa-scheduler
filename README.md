@@ -21,7 +21,7 @@
 **Missing steps:** Lambda function configuration, EventBridge schedule configuration
 
 ## (Optional) Configuring Google Sheet and a Google Service Account to write execution results
-The app uses [`gspread`](https://docs.gspread.org/en/v6.0.0/) to write execution results to a Google Sheet. Refer to the [library documentation to learn how to setup authentication](https://docs.gspread.org/en/v6.0.0/oauth2.html#for-bots-using-service-account) and let the app write to the spreadsheet. 
+The app uses [`gspread`](https://docs.gspread.org/en/v6.0.0/) to write execution results to a Google Sheet. Refer to the [library documentation to learn how to setup authentication](https://docs.gspread.org/en/v6.0.0/oauth2.html#for-bots-using-service-account) and let the app write to the spreadsheet.
 The spreadsheet to be updated is indicated by its ID configured for the config variable `SPREADSHEET_ID`.
 After the authentication is configured as per `gspread` docs, you should have a JSON key file that must be named `keyfile.json` and placed in the root directory of the application.
 
@@ -31,3 +31,4 @@ This configuration is only necessary if you wish to write the results to a Googl
 - Deploy new image to lambda function via deployment script
 - Extend it to work with Immigrant visa appointments
 - Use Serverless Framework to facilitate the deployment OR start the Lambda function and EventBridge schedule in the bash script
+- Deploy on pushes using GH Actions
