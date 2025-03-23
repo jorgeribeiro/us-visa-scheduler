@@ -31,4 +31,3 @@ This configuration is only necessary if you wish to write the results to a Googl
 - Deploy new image to lambda function via deployment script
 - Extend it to work with Immigrant visa appointments
 - Use Serverless Framework to facilitate the deployment OR start the Lambda function and EventBridge schedule in the bash script
-- Deploy on pushes using GH Actions
