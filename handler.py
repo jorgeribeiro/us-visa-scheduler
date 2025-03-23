@@ -23,7 +23,7 @@ def lambda_handler(event, context):
         next_rate = f"{Time.WEBDRIVER_EXCEPTION_TIME // 60} minutes"
     elif result == Result.FAILED_RESCHEDULE:
         next_rate = f"{Time.FAILED_RESCHEDULE_TIME // 60} minutes"
-    elif result == Result.SUCCESSFUL_RESCHEDULE:
+    elif result == Result.SUCCESSFUL_RESCHEDULE or result == Result.EARLIER_SLOT_FOUND:
         next_rate = "7 days"
     elif result == Result.STOP:
         disable_schedule = True
