@@ -10,6 +10,7 @@ class Time:
 
 class Result(Enum):
     SUCCESSFUL_RESCHEDULE = 'Successful reschedule'
+    EARLIER_SLOT_FOUND = 'Earlier slot found'
     FAILED_RESCHEDULE = 'Failed reschedule'
     RETRY = 'Retry'
     COOLDOWN = 'Cooldown'

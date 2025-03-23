@@ -53,6 +53,8 @@ SPREADSHEET_ID = config['GOOGLE_SHEETS']['SPREADSHEET_ID']
 USE = config['ENVIRONMENT']['USE']
 TIMEZONE = config['ENVIRONMENT']['TIMEZONE']
 
+IS_FREETRIAL_ENABLED = config['FREETRIAL'].getboolean('ENABLED')
+
 REGEX_CONTINUE = "//a[contains(text(),'Continue')]"
 
 STEP_TIME = 0.5  # time between steps (interactions with forms)
@@ -429,11 +431,17 @@ class VisaScheduler:
                     self.write_result_to_gsheet(execution_timestamp, 'None', Result.RETRY.value)
                     return Result.RETRY
 
-                result = self.reschedule(date, date_time, asc_date[0], asc_date[1])
-                self.send_notification(f"[{USERNAME}] Earlier date found: {date}")
+                if IS_FREETRIAL_ENABLED:
+                    result = Result.EARLIER_SLOT_FOUND
+                else:
+                    result = self.reschedule(date, date_time, asc_date[0], asc_date[1])
             else:
-                result = self.reschedule(date, date_time)
-                self.send_notification(f"[{USERNAME}] Earlier date found: {date}")
+                if IS_FREETRIAL_ENABLED:
+                    result = Result.EARLIER_SLOT_FOUND
+                else:
+                    result = self.reschedule(date, date_time)
+
+            self.send_notification(f"[{USERNAME}] Earlier date found: {date}")
             self.write_result_to_gsheet(execution_timestamp, date, result.value)
         except Exception as e:
             logger.error(e)
