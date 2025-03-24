@@ -13,6 +13,7 @@
 - To successfully run the deployment script, the following must be correctly configured
     - Make sure the script is executable by running `chmod +x deploy.sh`
     - Docker daemon is running
+    - AWS CLI is installed in your machine
     - AWS credentials are setup for the account ID you're using to deploy the image
     - If a Google Sheet is to be updated with the execution results (as explained in the section below) a `keyfile.json` must be present in the root directory
 - For new Lambda functions, follow the steps below (only needed once for each Lambda function):
