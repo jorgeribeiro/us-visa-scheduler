@@ -330,6 +330,8 @@ class VisaScheduler:
             if is_earlier(date) and not date in blacklisted_dates:
                 return date
 
+        logger.info("No earlier date found matching the configured filters.")
+
     @staticmethod
     def send_notification(msg):
         logger.info(f"Sending notification: {msg}")
