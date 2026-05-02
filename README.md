@@ -29,6 +29,7 @@
 The app uses [`gspread`](https://docs.gspread.org/en/v6.0.0/) to write execution results to a Google Sheet. Refer to the [library documentation to learn how to setup authentication](https://docs.gspread.org/en/v6.0.0/oauth2.html#for-bots-using-service-account) and let the app write to the spreadsheet.
 The spreadsheet to be updated is indicated by its ID configured for the config variable `SPREADSHEET_ID`.
 After the authentication is configured as per `gspread` docs, you should have a JSON key file that must be named `keyfile.json` and placed in the root directory of the application.
+The spreadsheet must be shared as Editor with the service account email found in the `client_email` field of your `keyfile.json`.
 
 This configuration is only necessary if you wish to write the results to a Google Sheet to have better visibility on the execution results. The app works just fine without it.
 
