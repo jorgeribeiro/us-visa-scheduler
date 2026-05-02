@@ -20,6 +20,12 @@ DATE_RANGE_ONE = 2024-07-07,2024-07-17
 DATE_RANGE_TWO = 2024-12-01,2024-12-31
 DATE_RANGE_THREE = 2024-08-01
 
+[ALLOWED_DATES]
+; Optional dates to consider — if set, only dates within these ranges will be used for rescheduling
+; (still subject to the "earlier than current appointment" and BLACKLISTED_DATES rules)
+; DATE_RANGE_ONE = 2024-09-01,2024-09-30
+; DATE_RANGE_TWO = 2024-10-15
+
 [ENVIRONMENT]
 ; Environment variables: LOCAL, AWS
 USE = AWS

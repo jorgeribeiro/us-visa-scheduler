@@ -43,6 +43,7 @@ ASC_ID = config['USVISA']['ASC_ID']
 NEED_ASC = config['USVISA'].getboolean('NEED_ASC')
 
 BLACKLISTED_DATES = config['BLACKLISTED_DATES']
+ALLOWED_DATES = config['ALLOWED_DATES'] if config.has_section('ALLOWED_DATES') else {}
 
 SENDGRID_API_KEY = config['SENDGRID']['SENDGRID_API_KEY']
 PRIMARY_EMAIL_RECIPIENT = config['SENDGRID']['PRIMARY_EMAIL_RECIPIENT']
@@ -300,14 +301,19 @@ class VisaScheduler:
         return dr
 
     def get_available_date(self, dates):
-        blacklisted_dates = []
-        for _, value in BLACKLISTED_DATES.items():
-            date_range = value.split(',')
-            start_date = datetime.strptime(date_range[0].strip(), '%Y-%m-%d')
-            end_date = datetime.strptime(date_range[-1].strip(), '%Y-%m-%d') + timedelta(days=1)
-            while start_date < end_date:
-                blacklisted_dates.append(start_date.strftime('%Y-%m-%d'))
-                start_date += timedelta(days=1)
+        def expand_ranges(section):
+            expanded = []
+            for _, value in section.items():
+                date_range = value.split(',')
+                start_date = datetime.strptime(date_range[0].strip(), '%Y-%m-%d')
+                end_date = datetime.strptime(date_range[-1].strip(), '%Y-%m-%d') + timedelta(days=1)
+                while start_date < end_date:
+                    expanded.append(start_date.strftime('%Y-%m-%d'))
+                    start_date += timedelta(days=1)
+            return expanded
+
+        blacklisted_dates = expand_ranges(BLACKLISTED_DATES)
+        allowed_dates = expand_ranges(ALLOWED_DATES)
 
         def is_earlier(date):
             my_date = datetime.strptime(self.my_schedule_date, "%Y-%m-%d")
@@ -319,6 +325,8 @@ class VisaScheduler:
         logger.info("Checking for an earlier date:")
         for d in dates:
             date = d.get('date')
+            if allowed_dates and date not in allowed_dates:
+                continue
             if is_earlier(date) and not date in blacklisted_dates:
                 return date
 
