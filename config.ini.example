@@ -30,6 +30,13 @@ DATE_RANGE_THREE = 2024-08-01
 ; Minimum number of days between today and a candidate appointment date.
 ; Defaults to 1 if omitted (i.e. tomorrow is the earliest acceptable date; today is rejected).
 MIN_DAYS_FROM_TODAY = 1
+; Minimum improvement gap (in days) between the current appointment and a candidate date.
+; Scales linearly with how far out the current appointment is, capped at this value:
+;   required_gap = MIN_GAP_DAYS * min(1.0, days_to_current_appointment / 365)
+; Examples with MIN_GAP_DAYS=60: current 1+ year out → require 60 days earlier;
+; current 6 months out → require ~30 days earlier; current 1 month out → require ~5 days earlier.
+; Set to 0 to accept any earlier date. Defaults to 60 if omitted.
+MIN_GAP_DAYS = 60
 
 [ENVIRONMENT]
 ; Environment variables: LOCAL, AWS
