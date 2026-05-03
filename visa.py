@@ -44,6 +44,7 @@ NEED_ASC = config['USVISA'].getboolean('NEED_ASC')
 
 BLACKLISTED_DATES = config['BLACKLISTED_DATES']
 ALLOWED_DATES = config['ALLOWED_DATES'] if config.has_section('ALLOWED_DATES') else {}
+MIN_DAYS_FROM_TODAY = config.getint('SCHEDULING', 'MIN_DAYS_FROM_TODAY', fallback=1)
 
 SENDGRID_API_KEY = config['SENDGRID']['SENDGRID_API_KEY']
 PRIMARY_EMAIL_RECIPIENT = config['SENDGRID']['PRIMARY_EMAIL_RECIPIENT']
@@ -322,10 +323,17 @@ class VisaScheduler:
             logger.info(f"Is {my_date} > {new_date}:\t{result}")
             return result
 
+        def meets_min_days(date):
+            today = datetime.today().date()
+            candidate = datetime.strptime(date, "%Y-%m-%d").date()
+            return (candidate - today).days >= MIN_DAYS_FROM_TODAY
+
         logger.info("Checking for an earlier date:")
         for d in dates:
             date = d.get('date')
             if allowed_dates and date not in allowed_dates:
+                continue
+            if not meets_min_days(date):
                 continue
             if is_earlier(date) and not date in blacklisted_dates:
                 return date

@@ -26,6 +26,11 @@ DATE_RANGE_THREE = 2024-08-01
 ; DATE_RANGE_ONE = 2024-09-01,2024-09-30
 ; DATE_RANGE_TWO = 2024-10-15
 
+[SCHEDULING]
+; Minimum number of days between today and a candidate appointment date.
+; Defaults to 1 if omitted (i.e. tomorrow is the earliest acceptable date; today is rejected).
+MIN_DAYS_FROM_TODAY = 1
+
 [ENVIRONMENT]
 ; Environment variables: LOCAL, AWS
 USE = AWS
