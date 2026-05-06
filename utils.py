@@ -9,8 +9,8 @@ class Time:
     WEBDRIVER_EXCEPTION_TIME = 60  # wait time when webdriver exception occurs: 1 minute
     FAILED_RESCHEDULE_TIME = 60  # wait time when failed to reschedule: 1 minute
 
-# Peak windows (weekday-only) during which RETRY / WEBDRIVER_EXCEPTION / FAILED_RESCHEDULE
-# next-runs are scheduled every PEAK_INTERVAL_CHOICES minutes.
+# Peak windows (weekday-only) during which a RETRY next-run is scheduled
+# every PEAK_INTERVAL_CHOICES minutes instead of the default RETRY_TIME.
 # Evaluated in the timezone configured via os.environ['TZ'] (set in VisaScheduler.__init__).
 PEAK_WINDOWS = [
     (time(7, 30), time(10, 30)),
