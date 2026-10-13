@@ -1,8 +1,10 @@
 import logging
 import boto3
 
-from utils import Time
+from utils import Time, is_peak_now, peak_interval_minutes
 from visa import VisaScheduler, Result
+
+PEAK_OVERRIDE_RESULTS = {Result.RETRY}
 
 logger = logging.getLogger("Visa_Logger")
 
@@ -25,6 +27,10 @@ def lambda_handler(event, context):
         next_rate = f"{Time.FAILED_RESCHEDULE_TIME // 60} minutes"
     elif result == Result.SUCCESSFUL_RESCHEDULE or result == Result.EARLIER_SLOT_FOUND or result == Result.STOP:
         disable_schedule = True
+
+    if result in PEAK_OVERRIDE_RESULTS and is_peak_now():
+        next_rate = f"{peak_interval_minutes()} minutes"
+        logger.info(f"Peak window active; overriding next rate to {next_rate}")
 
     logger.info(f"Next rate: {next_rate}, Disable schedule: {disable_schedule}")
     event_arn = event["resources"][0]
